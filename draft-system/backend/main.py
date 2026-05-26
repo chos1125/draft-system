@@ -16,10 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 🌟 [경로 버그 해결] 실행되는 위치와 상관없이 무조건 main.py 옆에 있는 엑셀을 찾도록 수정
+# 경로 및 파일명 완벽 수정
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
-EXCEL_FILE = os.path.join(current_dir, "내전 기록표(업그레이드 버전).xlsx")
+# 🌟 엑셀 파일이 backend 폴더가 아니라 상위(루트) 폴더에 있으므로 parent_dir 기준으로 변경!
+EXCEL_FILE = os.path.join(parent_dir, "프로그램에 넣을용.xlsx")
 
 # 주소 충돌 없도록 각각의 파일을 1:1로 정확하게 서빙
 @app.get("/")
