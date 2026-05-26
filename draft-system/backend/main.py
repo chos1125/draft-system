@@ -1,6 +1,6 @@
 import os
 import uvicorn
-import pandas as pd  # 🌟 미안해! 이게 빠져있었어!! 엑셀 읽는 핵심 라이브러리 추가
+import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -16,11 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-EXCEL_FILE = "프로그램에 넣을용.xlsx"
-
-# 상위 폴더(index.html이 있는 곳) 경로 계산
+# 🌟 [경로 버그 해결] 실행되는 위치와 상관없이 무조건 main.py 옆에 있는 엑셀을 찾도록 수정
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
+EXCEL_FILE = os.path.join(current_dir, "내전 기록표(업그레이드 버전).xlsx")
 
 # 주소 충돌 없도록 각각의 파일을 1:1로 정확하게 서빙
 @app.get("/")
@@ -38,11 +37,10 @@ def read_script():
 @app.get("/api/players")
 def get_players():
     if not os.path.exists(EXCEL_FILE):
-        print(f"❌ 오류: '{EXCEL_FILE}' 파일이 backend 폴더에 없습니다!")
+        print(f"❌ 오류: '{EXCEL_FILE}' 파일이 지정된 경로에 없습니다!")
         return []
 
     try:
-        # 이제 정상적으로 엑셀의 'PLAYER_STATS' 시트 읽기 작동!
         df = pd.read_excel(EXCEL_FILE, sheet_name="PLAYER_STATS")
         
         players_list = []
@@ -77,6 +75,5 @@ def get_players():
         print(f"❌ 엑셀 읽기 오류: {e}")
         return []
 
-# 우측 상단 재생(▶) 버튼 클릭 시 서버 구동
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
