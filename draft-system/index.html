@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소환사의 협곡 - 내전 통제실</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 🌟 브라우저가 엑셀 파일(.xlsx)을 직접 읽을 수 있게 해주는 라이브러리 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- 상단 네비게이션 탭 -->
+    <nav class="top-nav">
+        <button id="nav-draft" class="tab-btn active">⚔️ 랭크 드래프트</button>
+        <button id="nav-hof" class="tab-btn">🏆 소환사 명예의 전당</button>
+    </nav>
+
+    <!-- [탭 1] 드래프트 구역 -->
+    <div id="tab-draft-content">
+        <div id="phase1-setup" class="setup-container">
+            <h2>롤 내전 멤버 관리</h2>
+            <p>매니저님이 공유해준 엑셀 파일을 그대로 업로드하세요.</p>
+
+            <!-- 📁 진짜 엑셀 파일(.xlsx) 직통 업로드 박스 -->
+            <div class="excel-upload-box">
+                <h3>📊 매니저 정산 엑셀(.xlsx) 파일 연동</h3>
+                <p>내전 기록표 파일을 선택하면 모스트 챔피언과 KDA가 자동 동기화됩니다.</p>
+                <input type="file" id="excel-file" accept=".xlsx, .xls">
+            </div>
+
+            <div class="data-management">
+                <button id="btn-export">📤 현재 명단 복사 (데이터 백업용)</button>
+                <button id="btn-import">📥 백업 명단 붙여넣기</button>
+            </div>
+            
+            <div class="add-player-box">
+                <div class="input-row">
+                    <input type="text" id="new-name" placeholder="닉네임 수동 수정/등록">
+                    <select id="new-tier"></select>
+                </div>
+            </div>
+
+            <input type="text" id="search-input" class="search-box" placeholder="🔍 소환사 닉네임 검색...">
+            
+            <div id="total-player-list" class="checkbox-list"></div>
+            <button id="btn-start-draft" class="btn-primary">드래프트 시작</button>
+        </div>
+
+        <!-- 드래프트 화면 -->
+        <div id="phase2-draft" class="draft-container" style="display: none;">
+            <div class="draft-header">
+                <button id="btn-go-back" class="btn-secondary">⬅️ 셋업 화면으로 돌아가기</button>
+            </div>
+            
+            <div class="draft-boards">
+                <div class="team-section blue-team">
+                    <h2 class="team-title">BLUE TEAM</h2>
+                    <div id="blue-roster" class="roster-list"></div>
+                </div>
+                <div class="pool-section">
+                    <h2 class="pool-title">대기 중인 소환사 (마우스 오버 시 프로필 카드 오픈)</h2>
+                    <div id="agent-pool" class="agent-list"></div>
+                </div>
+                <div class="team-section red-team">
+                    <h2 class="team-title">RED TEAM</h2>
+                    <div id="red-roster" class="roster-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [탭 2] 명예의 전당 구역 -->
+    <div id="tab-hof-content" style="display: none;">
+        <div class="hof-container">
+            <h1 class="hof-title">SUMMONER'S HOF</h1>
+            <p class="hof-subtitle">엑셀 누적 데이터 기반 시즌 TOP 5 랭킹</p>
+            
+            <div class="ranking-boards">
+                <div class="rank-card">
+                    <h3>🔥 시즌 최고 승률 (WIN RATE)</h3>
+                    <ul id="rank-win" class="rank-list"></ul>
+                </div>
+                <div class="rank-card">
+                    <h3>👑 최고 평점 (AVG KDA)</h3>
+                    <ul id="rank-kda" class="rank-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
